@@ -1,0 +1,43 @@
+---
+title: "bookdown_textreferences"
+author: "Frank"
+date: "13 februari 2019"
+output:
+  
+  docx: bookdown::word_document2
+  bookdown: bookdown::pdf_document2
+  html: bookdown::html_document2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::knit_hooks$set(interceptor = function(before, options, envir){
+  
+})
+
+knitr::knit_hooks$set(inline = function(x){
+  paste("<a href=\"test_bookmark\">", x, "</a>", sep = "")
+})
+
+knitr::knit_hooks$set(document = function(x){
+  
+  cat(x, file = "dump.txt")
+  
+  base::identity(x)
+})
+```
+
+Some text.
+
+(ref:cool-plot) A boxplot of the data `iris` in **base** R.
+
+Take me to [pookie](#pookie)
+
+```{r cool-plot, fig.cap='(ref:cool-plot)'}
+boxplot(Sepal.Length ~ Species, data = iris)
+```
+
+(ref:test) This is some text you might want to refer to later: 2+2 = `r 2+2`.
+
+A bit later, we refer to it like this (ref:test)

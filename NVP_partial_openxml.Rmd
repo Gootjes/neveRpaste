@@ -1,0 +1,114 @@
+---
+title: "NVP_partial_openxml"
+author: "Frank"
+date: "13 februari 2019"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(knitr)
+knit_print.neverpaste <- function(x, ...) {
+  knit_print(asis_output(paste("```{=openxml}",x,"```",sep="\n")))
+}
+knit_print.neverpaste_inline <- function(x, ...) {
+  knit_print(asis_output(paste("`",x,"`{=openxml}",sep="")))
+}
+```
+
+You can also use inline text: `r "this is inline text"` (<- like that).
+
+```{r}
+createField <- function(file, bookmark) {
+  
+  instr <- paste("INCLUDETEXT", "  ", "\"", file, "\"", " ", bookmark, " ", "\\*", " ", "MERGEFORMAT", sep = "")
+  
+  full <- paste("
+  <w:p>
+   <w:pPr>
+      <w:rPr>
+         <w:b />
+         <w:bCs />
+      </w:rPr>
+   </w:pPr>
+   <w:r>
+      <w:fldChar w:fldCharType=\"begin\" />
+   </w:r>
+   <w:r>
+      <w:instrText xml:space=\"preserve\"> ", instr," </w:instrText>
+   </w:r>
+   <w:r>
+      <w:fldChar w:fldCharType=\"separate\" />
+   </w:r>
+ </w:p>
+ <w:p>
+   <w:r>
+      <w:fldChar w:fldCharType=\"end\" />
+   </w:r>
+ </w:p>", sep = "")
+  
+  structure(full, class = "neverpaste")
+}
+
+createField2 <- function(file, bookmark) {
+  
+  instr <- paste("INCLUDETEXT", "  ", "\"", file, "\"", " ", bookmark, " ", "\\*", " ", "MERGEFORMAT", sep = "")
+  
+  full <- paste("
+   <w:pPr>
+      <w:rPr>
+         <w:b />
+         <w:bCs />
+      </w:rPr>
+   </w:pPr>
+   <w:r>
+      <w:fldChar w:fldCharType=\"begin\" />
+   </w:r>
+   <w:r>
+      <w:instrText xml:space=\"preserve\"> ", instr," </w:instrText>
+   </w:r>
+   <w:r>
+      <w:fldChar w:fldCharType=\"separate\" />
+   </w:r>
+   <w:r>
+      <w:fldChar w:fldCharType=\"end\" />
+   </w:r>", sep = "")
+  
+  structure(full, class = "neverpaste")
+}
+
+
+createInline <- function(file, bookmark) {
+  structure(createField2(file, bookmark), class = "neverpaste_inline")
+}
+``` 
+
+
+```{r}
+createInline("stat.docx", "table1")
+```
+
+`<w:bookmarkStart w:id="0" w:name="table1" />`{=openxml}
+```{r, echo=F}
+library(officer)
+library(flextable)
+flextable::flextable(mtcars)
+```
+`<w:bookmarkEnd w:id="0" />`{=openxml}
+
+`<w:bookmarkStart w:id="0" w:name="table1" />`{=openxml}
+```{r cool-plot, fig.cap='(ref:cool-plot)'}
+boxplot(Sepal.Length ~ Species, data = iris)
+```
+`<w:bookmarkEnd w:id="0" />`{=openxml}
