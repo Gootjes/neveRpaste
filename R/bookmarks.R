@@ -18,9 +18,13 @@ wrap <- function(x, name, id) {
 #' @export
 bookmark <- function(x, name = NULL) {
 
+  if(missing(x)) stop("x is missing")
+
+  if(length(x) > 1) stop("x must be of length one")
+
   if(is.null(name)) {
     args <- as.list(match.call())
-    name <- names(args)$x
+    name <- deparse(args$x)
   }
 
   name <- sanitize_name(name)
@@ -45,6 +49,8 @@ bookmarks <- function(...) {
   bms <- Map(f = function(name){
 
     output <- args[[name]]
+
+    if(length(output) > 1) stop("x must be of length one")
 
     i <- bookmark_counter$next_value()
     if(nchar(name) == 0) {

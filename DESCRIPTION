@@ -1,7 +1,7 @@
 Package: neverpaste
 Type: Package
 Title: Package that converts Ouput to Fields for use in Microsoft Office
-Version: 0.1.0
+Version: 0.2.3
 Author: Gootjes
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: Package that converts Ouput to Fields for use in Microsoft Office by using IncludeText fields and html files.
