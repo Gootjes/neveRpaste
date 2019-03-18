@@ -3,20 +3,21 @@ sanitize_name <- function(x) {
   stringr::str_replace_all(string = x, pattern = "[^a-zA-Z0-9_]+", replacement = "_")
 }
 
-wrap <- function(x, name, id) {
+wrap <- function(x, name, id, sep = "") {
   before <- paste0('`<w:bookmarkStart w:id="', id,'" w:name="', name,'" />`{=openxml}')
   after <- paste0('`<w:bookmarkEnd w:id="', id,'" />`{=openxml}')
 
-  paste(before, x, after, sep = "")
+  paste(before, x, after, sep = sep)
 }
 
 #' @title Produce a bookmark
 #'
 #' @param x The object to be bookmarked
 #' @param name If NULL (default), a name is deducted from `x`
+#' @param sep The seperator to use to concatenate bookmark and `x`
 #'
 #' @export
-bookmark <- function(x, name = NULL) {
+bookmark <- function(x, name = NULL, sep) {
 
   if(missing(x)) stop("x is missing")
 
@@ -97,6 +98,7 @@ make_name <- function(count) {
   paste0("unnamed-bookmark-", count, sep = "", collapse = "")
 }
 
+#' @export
 neverpaste_knitr_bookmark <- function(before, after, options) {
   if(before) {
     i <- bookmark_counter$next_value()
@@ -112,6 +114,7 @@ neverpaste_knitr_bookmark <- function(before, after, options) {
   }
 }
 
+#' @export
 neverpaste_knitr_inline <- function(output, options) {
   i <- bookmark_counter$next_value()
   n <- make_name(i)
@@ -122,6 +125,7 @@ neverpaste_knitr_inline <- function(output, options) {
   paste0(before, output, after)
 }
 
+#' @export
 neverpaste_knitr_chunk <- function(output, options) {
 
   i <- bookmark_counter$next_value()
