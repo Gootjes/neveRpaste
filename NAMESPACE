@@ -2,4 +2,7 @@
 
 export(bookmark)
 export(bookmarks)
+export(neverpaste_knitr_bookmark)
+export(neverpaste_knitr_chunk)
+export(neverpaste_knitr_inline)
 export(setup_knitr_bookmark_hooks)

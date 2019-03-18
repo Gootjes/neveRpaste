@@ -4,12 +4,14 @@
 \alias{bookmark}
 \title{Produce a bookmark}
 \usage{
-bookmark(x, name = NULL)
+bookmark(x, name = NULL, sep)
 }
 \arguments{
 \item{x}{The object to be bookmarked}
 
 \item{name}{If NULL (default), a name is deducted from `x`}
+
+\item{sep}{The seperator to use to concatenate bookmark and `x`}
 }
 \description{
 Produce a bookmark
