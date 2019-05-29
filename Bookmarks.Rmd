@@ -10,7 +10,8 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-source("R/bookmarks.R")
+library(tidyverse)
+library(neverpaste)
 ```
 
 ## R Markdown
@@ -21,7 +22,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ```{r}
 library(flextable)
-bookmark(x = flextable(mtcars), name = "table1")
+bookmark(x = flextable(mtcars), name = "table1", sep = "\n")
 ```
 
 The main effect of bookmarks was quite strong, `r bookmark(x = "_B_ = .023, _p_ < .001, _SE_ = .23", name = "m1_maineffect_bookmarks")`.
@@ -30,4 +31,8 @@ Does this print as well? `r bookmark(x = "What _about_ this?", name = "bullshit"
 
 ```{r}
 bookmark(x = "_And_ what about this?", name = "bullshit")
+```
+
+```{r}
+6.234 %>% as_bookmark(name = "d")
 ```

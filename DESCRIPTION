@@ -9,6 +9,6 @@ License: MIT
 Encoding: UTF-8
 LazyData: false
 RoxygenNote: 6.1.1
-Depends: stringi, stringr, markdown, knitr
+Imports: stringi, stringr, markdown, knitr
 Suggests: 
     testthat

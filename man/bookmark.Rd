@@ -4,7 +4,7 @@
 \alias{bookmark}
 \title{Produce a bookmark}
 \usage{
-bookmark(x, name = NULL, sep)
+bookmark(x, name = NULL, sep = "")
 }
 \arguments{
 \item{x}{The object to be bookmarked}

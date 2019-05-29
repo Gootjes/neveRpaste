@@ -3,7 +3,10 @@ sanitize_name <- function(x) {
   stringr::str_replace_all(string = x, pattern = "[^a-zA-Z0-9_]+", replacement = "_")
 }
 
+#' @importFrom knitr knit_print
 wrap <- function(x, name, id, sep = "") {
+  capture.output(x <- knit_print(x), file = "NUL")
+
   before <- paste0('`<w:bookmarkStart w:id="', id,'" w:name="', name,'" />`{=openxml}')
   after <- paste0('`<w:bookmarkEnd w:id="', id,'" />`{=openxml}')
 
@@ -17,11 +20,11 @@ wrap <- function(x, name, id, sep = "") {
 #' @param sep The seperator to use to concatenate bookmark and `x`
 #'
 #' @export
-bookmark <- function(x, name = NULL, sep) {
+bookmark <- function(x, name = NULL, sep = "") {
 
   if(missing(x)) stop("x is missing")
 
-  if(length(x) > 1) stop("x must be of length one")
+  #if(length(x) > 1) stop("x must be of length one")
 
   if(is.null(name)) {
     args <- as.list(match.call())
@@ -32,7 +35,7 @@ bookmark <- function(x, name = NULL, sep) {
 
   i <- bookmark_counter$next_value()
 
-  knitr::asis_output(wrap(x = x, name = name, id = i))
+  knitr::asis_output(wrap(x = x, name = name, id = i, sep = sep))
 
 }
 
@@ -51,7 +54,7 @@ bookmarks <- function(...) {
 
     output <- args[[name]]
 
-    if(length(output) > 1) stop("x must be of length one")
+    #if(length(output) > 1) stop("x must be of length one")
 
     i <- bookmark_counter$next_value()
     if(nchar(name) == 0) {
@@ -158,3 +161,15 @@ setup_knitr_bookmark_hooks <- function() {
 
 }
 
+#' @export
+as_bookmark <- function(x, name, sep = "") {
+  class(x) <- c(class(x), "neverpaste_bookmark")
+  structure(x, neverpaste = list(name = name, sep = sep))
+  #x
+}
+
+#' @export
+knit_print.neverpaste_bookmark <- function(x, ...) {
+  class(x) <- setdiff(class(x), "neverpaste_bookmark")
+  bookmark(x = x, name = attributes(x)$neverpaste$name, sep = attributes(x)$neverpaste$sep)
+}
